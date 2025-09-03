@@ -1,7 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using UnityEngine;
 
 public class BaseCharacters : MonoBehaviour
@@ -10,7 +6,11 @@ public class BaseCharacters : MonoBehaviour
     
     public Attribs attribs;
 
+    public bool isAttacking;
+
     public Transform tgt;
+
+    [SerializeField] protected bool overrideDefaults;
     
     [System.Serializable]
     public class Attribs
@@ -38,6 +38,7 @@ public class BaseCharacters : MonoBehaviour
 
         }*/
         
+        // replaced health param with assigning max health as entity's initial health
         public void InitHealth(float minHealth, float maxHealth)
         {
             this.minHealth = minHealth;
@@ -60,10 +61,10 @@ public class BaseCharacters : MonoBehaviour
     {
         if (tgt.TryGetComponent<BaseCharacters>(out var validTgt))
         {
-            if (Vector3.Distance(transform.position, tgt.position) >= attribs.atkRange)
+            if (Vector3.Distance(transform.position, tgt.position) <= attribs.atkRange)
                 tgt.GetComponent<BaseCharacters>().AlterHealth(-attribs.dmg);
             else
-                Debug.Log($"{this.charName} is out of range. ");
+                Debug.Log($"{validTgt.charName} is out of range. ");
             
         }
         else
@@ -77,24 +78,18 @@ public class BaseCharacters : MonoBehaviour
         
     }
 
-    public void AlterHealth(float health)
+    protected void AlterHealth(float healthChange)
     {
-        attribs.health = Mathf.Clamp(attribs.health + health, attribs.minHealth, attribs.maxHealth);
+        attribs.health = Mathf.Clamp(attribs.health + healthChange, attribs.minHealth, attribs.maxHealth);
         
     }
-    
-    /*// Start is called before the first frame update
-    void Start()
+
+    public virtual void GetDmg(float dmg)
     {
         
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-        
-    }*/
-    
+    protected virtual void ApplyDefaultAttribs() {}
+
 }
