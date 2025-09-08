@@ -4,21 +4,36 @@ using UnityEngine;
 
 public class Orco : Enemigos
 {
-    // Start is called before the first frame update
-    void Start()
+
+    // function is put way up here for visibility because it contains the class default attributes
+    private void AssignDefaults()
     {
-        vida = 50f;
-        armadura = 20f;
-        attackRange = 0.5f;
-        dmg = 15f;
-        canTalk = false;
+        attribs.vida = 50f;
+        attribs.armadura = 20f;
+        attribs.attackRange = 0.5f;
+        attribs.dmg = 15f;
+        attribs.canTalk = false;
+        
+    }
+    
+    // Start is called before the first frame update
+    new void Start()
+    {
+        base.Start();
+        
+        if (!base.attribs.overrideDefaults)
+            AssignDefaults();
+        else
+            base.attribs.InitHealth();
         
     }
 
     // Update is called once per frame
     void Update()
     {
-        myPosition = transform.position;
+        base.Update();
+        
+        attribs.myPosition = transform.position;
         
     }
     

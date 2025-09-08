@@ -11,7 +11,7 @@ public class NPCs : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Instantiate(aliados[0],entities.transform);
+        Instantiate(aliados[0], entities.transform);
         Instantiate(enemigos[0], entities.transform);
         Instantiate(enemigos[1], entities.transform);
         

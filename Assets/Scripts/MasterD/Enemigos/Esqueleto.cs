@@ -4,21 +4,37 @@ using UnityEngine;
 
 public class Esqueleto : Enemigos
 {  
-    // Start is called before the first frame update
-    void Start()
+    
+
+    // function is put way up here for visibility because it contains the class default attributes
+    private void AssignDefaults()
     {
-        vida = 30f;
-        armadura = 10f;
-        attackRange = 3f;
-        dmg = 10f;
-        canTalk = false;
+        attribs.vida = 30f;
+        attribs.armadura = 10f;
+        attribs.attackRange = 3f;
+        attribs.dmg = 10f;
+        attribs.canTalk = false;
+        
+    }
+    
+    // Start is called before the first frame update
+    new void Start()
+    {
+        base.Start();
+        
+        if (!base.attribs.overrideDefaults)
+            AssignDefaults();
+        else
+            base.attribs.InitHealth();
         
     }
 
     // Update is called once per frame
     void Update()
     {
-        myPosition= transform.position;
+        base.Update();
+        
+        attribs.myPosition= transform.position;
         
     }
     
