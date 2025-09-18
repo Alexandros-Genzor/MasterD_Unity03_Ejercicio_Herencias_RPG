@@ -34,6 +34,8 @@ public class BasePersonajes : MonoBehaviour
         
         public GameObject target;
         public Vector3 myPosition;
+        
+        [SerializeField] internal SceneManager scene;
 
         /// <summary>
         /// Initializes the character's default current, minimum and maximum health value.
@@ -65,6 +67,12 @@ public class BasePersonajes : MonoBehaviour
             this.attackRange = atkRange;
             
         }
+        
+    }
+
+    protected void Start()
+    {
+        attribs.scene = GameObject.Find("SceneManager").GetComponent<SceneManager>();
         
     }
 
