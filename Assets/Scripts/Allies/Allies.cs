@@ -3,16 +3,23 @@ using UnityEngine;
 public class Allies : BaseCharacters
 {
     // Start is called before the first frame update
-    internal void Start()
+    internal new void Start()
     {
+        base.Start();
+        
         base.attribs.isFriendly = true;
 
     }
 
     // Update is called once per frame
-    void Update()
+    internal void Update()
     {
-        
+        if (base.tgt != null && base.isAttacking)
+        {
+            base.Attack();
+            base.isAttacking = false;
+
+        }
         
     }
     

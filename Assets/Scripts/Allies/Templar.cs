@@ -5,7 +5,7 @@ using UnityEngine;
 public class Templar : Allies
 {
     // Start is called before the first frame update
-    void Start()
+    new void Start()
     {
         base.Start();
         
@@ -15,14 +15,9 @@ public class Templar : Allies
     }
 
     // Update is called once per frame
-    void Update()
+    new void Update()
     {
-        if (base.tgt != null && base.isAttacking)
-        {
-            base.Attack();
-            base.isAttacking = false;
-
-        }
+        base.Update();
         
     }
     

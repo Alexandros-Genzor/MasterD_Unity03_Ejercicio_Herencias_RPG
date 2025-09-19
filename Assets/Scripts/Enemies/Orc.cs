@@ -3,7 +3,7 @@ using UnityEngine;
 public class Orc : Enemies
 {
     // Start is called before the first frame update
-    void Start()
+    new void Start()
     {
         base.Start();
 
@@ -18,16 +18,9 @@ public class Orc : Enemies
     }
 
     // Update is called once per frame
-    void Update()
+    new void Update()
     {
         base.Update();
-
-        if (base.tgt != null && base.isAttacking)
-        {
-            base.Attack();
-            base.isAttacking = false;
-
-        }
         
     }
 

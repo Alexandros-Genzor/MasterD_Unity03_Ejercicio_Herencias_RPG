@@ -1,21 +1,20 @@
+using System;
 using UnityEngine;
 
 public class BaseCharacters : MonoBehaviour
 {
     public string charName;
-    
+    [SerializeField] protected bool overrideDefaults;
     public Attribs attribs;
 
     public bool isAttacking;
-
     public Transform tgt;
 
-    [SerializeField] protected bool overrideDefaults;
     
     [System.Serializable]
     public class Attribs
     {
-        public float health;
+        public float health = -1;
         public float minHealth;
         public float maxHealth;
 
@@ -57,15 +56,21 @@ public class BaseCharacters : MonoBehaviour
 
     }
 
+    internal void Start()
+    {
+        
+        
+    }
+
     public virtual void Attack()
     {
         if (tgt.TryGetComponent<BaseCharacters>(out var validTgt))
         {
             if (Vector3.Distance(transform.position, tgt.position) <= attribs.atkRange)
-                tgt.GetComponent<BaseCharacters>().AlterHealth(-attribs.dmg);
+                tgt.GetComponent<BaseCharacters>().GetDmg(attribs.dmg);
             else
                 Debug.Log($"{validTgt.charName} is out of range. ");
-            
+
         }
         else
         {
@@ -78,15 +83,21 @@ public class BaseCharacters : MonoBehaviour
         
     }
 
-    protected void AlterHealth(float healthChange)
+    protected void AlterHealth(float hpChange, bool isHealing = false)
     {
-        attribs.health = Mathf.Clamp(attribs.health + healthChange, attribs.minHealth, attribs.maxHealth);
+        // attribs.health = Mathf.Clamp(attribs.health + healthChange, attribs.minHealth, attribs.maxHealth);
+        attribs.health = Mathf.Clamp(attribs.health + (hpChange * (isHealing ? 1 : -1)), 0, attribs.maxHealth);
         
     }
 
+    // need to tweak algorithm. lower level than opponent should have a damage penalty and higher lever, a boost.
     public virtual void GetDmg(float dmg)
     {
+        float calculatedDmg = Mathf.Clamp(dmg - ((attribs.armor / 2f) + (attribs.lvl / 3f)) /
+            (dmg / 2), 0f, 9999);
         
+        Debug.Log(calculatedDmg);
+        AlterHealth(calculatedDmg);
         
     }
 

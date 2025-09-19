@@ -31,9 +31,9 @@ public class Enemigos : BasePersonajes
     }
     
     // Start is called before the first frame update
-    protected void Start()
+    internal new void Start()
     {
-        
+        base.Start();
         
     }
 
