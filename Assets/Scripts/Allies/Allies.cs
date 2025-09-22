@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class Allies : BaseCharacters
 {
+    [SerializeField] protected bool isPlayer;
+    [SerializeField] protected bool doPause;
+    
     // Start is called before the first frame update
     internal new void Start()
     {
@@ -12,15 +15,20 @@ public class Allies : BaseCharacters
     }
 
     // Update is called once per frame
-    internal void Update()
+    internal new void Update()
     {
+        base.Update();
+        
         if (base.tgt != null && base.isAttacking)
         {
             base.Attack();
             base.isAttacking = false;
 
         }
-        
+
+        if (isPlayer)
+            base.attribs.scene.pauseScene = doPause;
+
     }
     
 }

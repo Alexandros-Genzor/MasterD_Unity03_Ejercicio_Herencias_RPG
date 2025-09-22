@@ -9,7 +9,7 @@ public class Templar : Allies
     {
         base.Start();
         
-        base.attribs.InitStats(10, 5, 4);
+        base.attribs.InitStats(10, 5, 4, 8);
         base.attribs.InitHealth(0, 100);
         
     }
@@ -17,7 +17,11 @@ public class Templar : Allies
     // Update is called once per frame
     new void Update()
     {
-        base.Update();
+        if (!base.attribs.isDead)
+        {
+            base.Update();
+            
+        }
         
     }
     

@@ -9,7 +9,6 @@ public class BaseCharacters : MonoBehaviour
 
     public bool isAttacking;
     public Transform tgt;
-
     
     [System.Serializable]
     public class Attribs
@@ -28,6 +27,9 @@ public class BaseCharacters : MonoBehaviour
         public bool isIncapacitated;
         public bool isDead;
         public bool isFriendly;
+        
+        public SceneManager scene;
+        public Vector3 pausePos;
 
         /*public void InitHealth(float health, float minHealth, float maxHealth)
         {
@@ -46,11 +48,12 @@ public class BaseCharacters : MonoBehaviour
 
         }
 
-        public void InitStats(float dmg, float armor, float atkRange)
+        public void InitStats(float dmg, float armor, float atkRange, int lvl = 1)
         {
             this.dmg = dmg;
             this.armor = armor;
             this.atkRange = atkRange;
+            this.lvl = lvl;
             
         }
 
@@ -58,28 +61,49 @@ public class BaseCharacters : MonoBehaviour
 
     internal void Start()
     {
+        attribs.scene = GameObject.Find("SceneManager").GetComponent<SceneManager>();
         
+    }
+
+    internal void Update()
+    {
+        UpdatePositions();
+        
+    }
+
+    private void UpdatePositions()
+    {
+        if (attribs.scene.pauseScene)
+            transform.position = attribs.pausePos;
+        else
+            attribs.pausePos = transform.position;
         
     }
 
     public virtual void Attack()
     {
-        if (tgt.TryGetComponent<BaseCharacters>(out var validTgt))
+        if (!attribs.scene.pauseScene)
         {
-            if (Vector3.Distance(transform.position, tgt.position) <= attribs.atkRange)
-                tgt.GetComponent<BaseCharacters>().GetDmg(attribs.dmg);
-            else
-                Debug.Log($"{validTgt.charName} is out of range. ");
+            if (tgt.TryGetComponent<BaseCharacters>(out var validTgt))
+            {
+                if (Vector3.Distance(transform.position, tgt.position) <= attribs.atkRange)
+                    tgt.GetComponent<BaseCharacters>().GetDmg(attribs.dmg, attribs.lvl);
+                else
+                    Debug.Log($"{validTgt.charName} is out of range. ");
 
+            }
+            else
+            {
+                Debug.LogWarning($"{tgt.GetComponent<BaseCharacters>().ToString()} lacks script component or " +
+                                 $"does not inherit from BaseCharacters.");
+            
+                return;
+
+            }
+            
         }
         else
-        {
-            Debug.LogWarning($"{tgt.GetComponent<BaseCharacters>().ToString()} lacks script component or " +
-                      $"does not inherit from BaseCharacters.");
-            
-            return;
-
-        }
+            Debug.Log("Game is paused.");
         
     }
 
@@ -87,14 +111,19 @@ public class BaseCharacters : MonoBehaviour
     {
         // attribs.health = Mathf.Clamp(attribs.health + healthChange, attribs.minHealth, attribs.maxHealth);
         attribs.health = Mathf.Clamp(attribs.health + (hpChange * (isHealing ? 1 : -1)), 0, attribs.maxHealth);
-        
+
+        if (attribs.health <= 0)
+            attribs.isDead = true;
+
     }
 
     // need to tweak algorithm. lower level than opponent should have a damage penalty and higher lever, a boost.
-    public virtual void GetDmg(float dmg)
+    public virtual void GetDmg(float dmg, float attackerLvl)
     {
-        float calculatedDmg = Mathf.Clamp(dmg - ((attribs.armor / 2f) + (attribs.lvl / 3f)) /
-            (dmg / 2), 0f, 9999);
+        // float calculatedDmg = Mathf.Clamp(dmg - ((attribs.armor / 2f) + (attribs.lvl / 3f)) /
+        //     (dmg / 2), 0f, 9999);
+        
+        float calculatedDmg = Mathf.Clamp((dmg - (attribs.armor / 2f) / (dmg / 2)) * (attackerLvl / attribs.lvl), 0f, 9999);
         
         Debug.Log(calculatedDmg);
         AlterHealth(calculatedDmg);

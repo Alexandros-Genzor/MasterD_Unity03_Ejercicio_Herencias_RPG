@@ -11,8 +11,10 @@ public class Enemies : BaseCharacters
 
     }
 
-    internal void Update()
+    internal new void Update()
     {
+        base.Update();
+        
         if (base.tgt != null && base.isAttacking)
         {
             base.Attack();

@@ -9,7 +9,7 @@ public class Orc : Enemies
 
         if (!base.overrideDefaults)
         {
-            base.attribs.InitStats(50, 1, 2);
+            base.attribs.InitStats(50, 1, 2, 4);
             base.attribs.InitHealth(0, 200);
             base.attribs.isFriendly = false;
             
@@ -20,7 +20,11 @@ public class Orc : Enemies
     // Update is called once per frame
     new void Update()
     {
-        base.Update();
+        if (!base.attribs.isDead)
+        {
+            base.Update();
+            
+        }
         
     }
 

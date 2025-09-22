@@ -155,6 +155,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   charName: Jorunn
+  overrideDefaults: 0
   attribs:
     health: 0
     minHealth: 0
@@ -167,9 +168,10 @@ MonoBehaviour:
     isIncapacitated: 0
     isDead: 0
     isFriendly: 0
+    scene: {fileID: 0}
+    pausePos: {x: 0, y: 0, z: 0}
   isAttacking: 0
   tgt: {fileID: 1581064181}
-  overrideDefaults: 0
 --- !u!65 &618537983
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -442,6 +444,51 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &963318046
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 963318048}
+  - component: {fileID: 963318047}
+  m_Layer: 0
+  m_Name: SceneManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &963318047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963318046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bd68462bd2c9684eb898920403668a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pauseScene: 0
+--- !u!4 &963318048
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963318046}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1581064176
 GameObject:
   m_ObjectHideFlags: 0
@@ -475,6 +522,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   charName: M'aiq
+  overrideDefaults: 0
   attribs:
     health: 0
     minHealth: 0
@@ -487,9 +535,12 @@ MonoBehaviour:
     isIncapacitated: 0
     isDead: 0
     isFriendly: 0
+    scene: {fileID: 0}
+    pausePos: {x: 0, y: 0, z: 0}
   isAttacking: 0
   tgt: {fileID: 618537986}
-  overrideDefaults: 0
+  isPlayer: 1
+  doPause: 0
 --- !u!136 &1581064178
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -586,3 +637,4 @@ SceneRoots:
   - {fileID: 705507995}
   - {fileID: 618537986}
   - {fileID: 1581064181}
+  - {fileID: 963318048}
