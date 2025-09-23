@@ -7,6 +7,8 @@ public class Enemies : BaseCharacters
     {
         base.Start();
         
+        base.attribs.isFriendly = false;
+        
         Debug.Log("Enemies");
 
     }

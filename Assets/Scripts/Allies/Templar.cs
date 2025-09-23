@@ -9,8 +9,8 @@ public class Templar : Allies
     {
         base.Start();
         
-        base.attribs.InitStats(10, 5, 4, 8);
         base.attribs.InitHealth(0, 100);
+        base.attribs.InitStats(10, 5, 4, 8);
         
     }
 

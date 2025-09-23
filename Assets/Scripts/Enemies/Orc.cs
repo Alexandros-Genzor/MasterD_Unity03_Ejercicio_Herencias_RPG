@@ -9,9 +9,8 @@ public class Orc : Enemies
 
         if (!base.overrideDefaults)
         {
-            base.attribs.InitStats(50, 1, 2, 4);
             base.attribs.InitHealth(0, 200);
-            base.attribs.isFriendly = false;
+            base.attribs.InitStats(50, 1, 2, 4);
             
         }
 

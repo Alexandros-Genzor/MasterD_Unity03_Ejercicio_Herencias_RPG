@@ -18,10 +18,10 @@ public class BaseCharacters : MonoBehaviour
         public float maxHealth;
 
         public float dmg;
-        public float armor;
         public float atkRange;
+        public float armor;
         
-        public int equipmentLvl;
+        public int equipmentLvl; //might not be necessary
         public int lvl;
         
         public bool isIncapacitated;
@@ -44,8 +44,10 @@ public class BaseCharacters : MonoBehaviour
         {
             this.minHealth = minHealth;
             this.maxHealth = maxHealth;
-            this.health = this.maxHealth;
-
+            
+            if (this.health == -1)
+                this.health = this.maxHealth;
+            
         }
 
         public void InitStats(float dmg, float armor, float atkRange, int lvl = 1)
@@ -86,10 +88,11 @@ public class BaseCharacters : MonoBehaviour
         {
             if (tgt.TryGetComponent<BaseCharacters>(out var validTgt))
             {
-                if (Vector3.Distance(transform.position, tgt.position) <= attribs.atkRange)
+                if (Vector3.Distance(transform.position, tgt.position) <= attribs.atkRange && 
+                    attribs.isFriendly != tgt.GetComponent<BaseCharacters>().attribs.isFriendly)
                     tgt.GetComponent<BaseCharacters>().GetDmg(attribs.dmg, attribs.lvl);
                 else
-                    Debug.Log($"{validTgt.charName} is out of range. ");
+                    Debug.Log($"{validTgt.charName} is out of range or {this.charName} is about to attack a friendly unit.");
 
             }
             else
@@ -110,7 +113,8 @@ public class BaseCharacters : MonoBehaviour
     protected void AlterHealth(float hpChange, bool isHealing = false)
     {
         // attribs.health = Mathf.Clamp(attribs.health + healthChange, attribs.minHealth, attribs.maxHealth);
-        attribs.health = Mathf.Clamp(attribs.health + (hpChange * (isHealing ? 1 : -1)), 0, attribs.maxHealth);
+        attribs.health = Mathf.Clamp(attribs.health + (hpChange * (isHealing ? 1 : -1)), attribs.minHealth, 
+            attribs.maxHealth);
 
         if (attribs.health <= 0)
             attribs.isDead = true;
@@ -123,7 +127,11 @@ public class BaseCharacters : MonoBehaviour
         // float calculatedDmg = Mathf.Clamp(dmg - ((attribs.armor / 2f) + (attribs.lvl / 3f)) /
         //     (dmg / 2), 0f, 9999);
         
-        float calculatedDmg = Mathf.Clamp((dmg - (attribs.armor / 2f) / (dmg / 2)) * (attackerLvl / attribs.lvl), 0f, 9999);
+        float calculatedDmg = Mathf.Clamp((dmg - (attribs.armor / 2f) / (dmg / 2)) * (attackerLvl / attribs.lvl), 
+            0f, 9999);
+
+        if (attribs.isIncapacitated)
+            calculatedDmg *= 1.5f;
         
         Debug.Log(calculatedDmg);
         AlterHealth(calculatedDmg);
