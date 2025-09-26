@@ -17,13 +17,6 @@ public class Enemies : BaseCharacters
     {
         base.Update();
         
-        if (base.tgt != null && base.isAttacking)
-        {
-            base.Attack();
-            base.isAttacking = false;
-
-        }
-        
     }
     
 }

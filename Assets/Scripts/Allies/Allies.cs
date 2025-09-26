@@ -19,13 +19,6 @@ public class Allies : BaseCharacters
     {
         base.Update();
         
-        if (base.tgt != null && base.isAttacking)
-        {
-            base.Attack();
-            base.isAttacking = false;
-
-        }
-
         if (isPlayer)
             base.attribs.scene.pauseScene = doPause;
 

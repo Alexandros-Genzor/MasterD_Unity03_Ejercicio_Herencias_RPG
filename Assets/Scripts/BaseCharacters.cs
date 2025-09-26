@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class BaseCharacters : MonoBehaviour
@@ -71,6 +70,9 @@ public class BaseCharacters : MonoBehaviour
     {
         UpdatePositions();
         
+        if (attribs.health <= 0)
+            attribs.isDead = true;
+        
     }
 
     private void UpdatePositions()
@@ -84,13 +86,14 @@ public class BaseCharacters : MonoBehaviour
 
     public virtual void Attack()
     {
-        if (!attribs.scene.pauseScene)
         {
             if (tgt.TryGetComponent<BaseCharacters>(out var validTgt))
             {
                 if (Vector3.Distance(transform.position, tgt.position) <= attribs.atkRange && 
-                    attribs.isFriendly != tgt.GetComponent<BaseCharacters>().attribs.isFriendly)
-                    tgt.GetComponent<BaseCharacters>().GetDmg(attribs.dmg, attribs.lvl);
+                    // attribs.isFriendly != tgt.GetComponent<BaseCharacters>().attribs.isFriendly)
+                    attribs.isFriendly != validTgt.attribs.isFriendly)
+                    // tgt.GetComponent<BaseCharacters>().GetDmg(attribs.dmg, attribs.lvl);
+                    validTgt.GetDmg(attribs.dmg, attribs.lvl);
                 else
                     Debug.Log($"{validTgt.charName} is out of range or {this.charName} is about to attack a friendly unit.");
 
@@ -105,12 +108,10 @@ public class BaseCharacters : MonoBehaviour
             }
             
         }
-        else
-            Debug.Log("Game is paused.");
         
     }
 
-    protected void AlterHealth(float hpChange, bool isHealing = false)
+    private void AlterHealth(float hpChange, bool isHealing = false)
     {
         // attribs.health = Mathf.Clamp(attribs.health + healthChange, attribs.minHealth, attribs.maxHealth);
         attribs.health = Mathf.Clamp(attribs.health + (hpChange * (isHealing ? 1 : -1)), attribs.minHealth, 
@@ -122,7 +123,7 @@ public class BaseCharacters : MonoBehaviour
     }
 
     // need to tweak algorithm. lower level than opponent should have a damage penalty and higher lever, a boost.
-    public virtual void GetDmg(float dmg, float attackerLvl)
+    protected virtual void GetDmg(float dmg, float attackerLvl)
     {
         // float calculatedDmg = Mathf.Clamp(dmg - ((attribs.armor / 2f) + (attribs.lvl / 3f)) /
         //     (dmg / 2), 0f, 9999);
@@ -133,8 +134,17 @@ public class BaseCharacters : MonoBehaviour
         if (attribs.isIncapacitated)
             calculatedDmg *= 1.5f;
         
-        Debug.Log(calculatedDmg);
+        Debug.Log($"DMG: {calculatedDmg}");
         AlterHealth(calculatedDmg);
+        
+    }
+
+    public virtual void GetHealed(float healValue, float healerLvl)
+    {
+        float calculatedHealing = healValue * Mathf.Clamp(healerLvl / attribs.lvl, 0f, 1);
+        
+        Debug.Log($"HEAL: {calculatedHealing}");
+        AlterHealth(calculatedHealing, true);
         
     }
 

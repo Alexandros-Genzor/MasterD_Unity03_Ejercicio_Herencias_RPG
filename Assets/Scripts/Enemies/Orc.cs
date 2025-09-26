@@ -23,6 +23,23 @@ public class Orc : Enemies
         {
             base.Update();
             
+            PerformAttack();
+            
+        }
+        
+    }
+
+    private void PerformAttack()
+    {
+        if (base.tgt != null && base.isAttacking)
+        {
+            if (!base.attribs.scene.PauseEnv())
+                base.Attack();
+            else
+                Debug.Log("Game is paused.");
+                
+            base.isAttacking = false;
+
         }
         
     }
